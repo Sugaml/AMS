@@ -9,9 +9,18 @@ Python and Django need to be installed
 pip install django
 ```
 
+## Installation
+
+Python and Django need to be installed
+
+```bash
+python manage.py startapp <APP_NAME>
+```
+
+
 ## Usage
 
-Go to the College-ERP folder and run
+Go to the AMS folder and run
 
 ```bash
 python manage.py runserver
