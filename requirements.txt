@@ -1,6 +1,7 @@
-asgiref
-Django
-djangorestframework
-djoser
-pytz
-sqlparse
+django==4.2.1
+django-cors-headers==4.0.0
+django-filter==23.2
+python-decouple==3.8
+psycopg2-binary==2.9.6
+django-humanize==0.1.2
+humanize==4.9.0
