@@ -43,22 +43,24 @@ Go to the AMS folder and run
 python manage.py runserver
 ```
 
-## git create branch
+# GIT
+
+## Create branch
 ```bash
 git checkout -b <issue_type>/<developer_name>/<what_you_work>
 ```
 
-## git add file
+## Add file
 ```bash
 git add <filename>
 ```
 
-## git commit 
+## Commit 
 ```bash
 git commit -m "<commit_message>"
 ```
 
-## git push to remote branch
+## Push to remote branch
 ```bash
 git push origin <branch_name>
 ```
@@ -73,7 +75,7 @@ git branch
 git branch -D <branch_name>
 ```
 
-## Git Status
+## Check Status
 ```bash
 git status
 ```
