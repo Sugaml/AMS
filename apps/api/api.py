@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from apps.models import *
 from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import datetime
 
 
 class HomeView(LoginRequiredMixin,TemplateView):
@@ -23,9 +24,6 @@ class HomeView(LoginRequiredMixin,TemplateView):
             "users": user,
             }
         return render(request, self.template_name, context)
-
-     
-
 
 
 class WelcomeView(TemplateView):
