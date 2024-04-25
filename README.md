@@ -19,15 +19,20 @@ python manage.py startapp <APP_NAME>
 
 # Install venv
 
-```
+```bash
 pip install virtualenv
 ```
 
 # Install Dependencies
 
-```
+```bash
 pip install -r requirements.txt
 
+```
+
+## Activate 
+```bash
+source venv/bin/activate
 ```
 
 ## Usage
