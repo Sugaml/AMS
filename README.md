@@ -17,6 +17,18 @@ Python and Django need to be installed
 python manage.py startapp <APP_NAME>
 ```
 
+# Install venv
+
+```
+pip install virtualenv
+```
+
+# Install Dependencies
+
+```
+pip install -r requirements.txt
+
+```
 
 ## Usage
 
