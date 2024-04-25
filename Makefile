@@ -9,3 +9,6 @@ dependencies:
 
 run:
 	python manage.py runserver
+
+superuser:
+	python manage.py createsuperuser
