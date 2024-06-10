@@ -88,9 +88,19 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
+                        <h5 class="card-title">Daily Attendance Report</h5>
+                        <p class="card-text">View the attendance report of students.</p>
+                        <a href="{% url 'attendance-report' %}" class="btn btn-primary">Today Report</a>
+                    </div>
+                </div>
+            </div>
+              <!-- Attendance Report Card -->
+              <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
                         <h5 class="card-title">Attendance Report</h5>
                         <p class="card-text">View the attendance report of students.</p>
-                        <a href="{% url 'attendance-report' %}" class="btn btn-primary">View Report</a>
+                        <a href="{% url 'attendance_report' %}" class="btn btn-primary">View Report</a>
                     </div>
                 </div>
             </div>

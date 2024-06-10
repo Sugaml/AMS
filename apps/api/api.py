@@ -14,6 +14,8 @@ from datetime import date
 from django.contrib.auth.views import LoginView, LogoutView
 import csv
 from django.core.paginator import Paginator
+from django.db.models import Count, F
+
 
 
 
@@ -118,24 +120,21 @@ def handle_uploaded_csv(csv_file):
 def add_student_success(request):
     return render(request, 'apps/student_success.html')
 
-from datetime import date
-
 def attendance_view(request):
     today = date.today()
     if Attendance.objects.filter(date=today).exists():
         return redirect('attendance-report')
+
     if request.method == 'POST':
         for student_id, status in request.POST.items():
             if student_id.startswith('student_'):
                 student_id = student_id.split('_')[1]
                 student = Student.objects.get(pk=student_id)
-                if Attendance.objects.filter(student=student, date=today).exists():
-                    continue
-                Attendance.objects.create(student=student, date=today, status=status)
-                return redirect('attendance-success')
+                if not Attendance.objects.filter(student=student, date=today).exists():
+                    Attendance.objects.create(student=student, date=today, status=status)
+        return redirect('attendance-success')
     students = Student.objects.all()
     return render(request, 'apps/attendance.html', {'students': students})
-
 
 def attendance_success(request):
     return render(request, 'apps/attendance_success.html')
@@ -156,3 +155,19 @@ def student_list_view(request):
         return render(request, 'apps/students.html', {'page_obj': page_obj, 'course': course, 'shift': shift})
     else:
         return render(request, 'apps/student_form.html')
+    
+def attendance_report(request):
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    if start_date and end_date:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        attendance_data = Attendance.objects.filter(date__range=[start_date, end_date]).values('student__name').annotate(total_attendance=Count('id'), period=F('date'))
+    else:
+        attendance_data = Attendance.objects.filter(date__month=current_month, date__year=current_year).values('student__name').annotate(total_attendance=Count('id'), period=F('date'))
+
+    return render(request, 'apps/attendance-month.html', {'attendance_data': attendance_data})

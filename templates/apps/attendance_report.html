@@ -16,11 +16,18 @@
         .search-form {
             margin-bottom: 30px;
         }
+        /* Define custom CSS for status */
+        .status-present {
+            color: green; /* Green color for 'Present' */
+        }
+        .status-absent {
+            color: red; /* Red color for 'Absent' */
+        }
     </style>
 </head>
 <body>
-      <!-- Navigation Bar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Attendance System</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
@@ -37,33 +44,7 @@
         <h1 class="text-center">Attendance Report</h1>
         <!-- Search Form -->
         <form method="get" class="form-row search-form">
-            <div class="form-group col-md-2">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{ request.GET.name }}">
-            </div>
-            <div class="form-group col-md-2">
-                <label for="roll_number">Roll Number</label>
-                <input type="text" class="form-control" id="roll_number" name="roll_number" placeholder="Roll Number" value="{{ request.GET.roll_number }}">
-            </div>
-            <div class="form-group col-md-2">
-                <label for="dob">DOB</label>
-                <input type="text" class="form-control datepicker" id="dob" name="dob" placeholder="DOB" value="{{ request.GET.dob }}">
-            </div>
-            <div class="form-group col-md-2">
-                <label for="course">Course</label>
-                <input type="text" class="form-control" id="course" name="course" placeholder="Course" value="{{ request.GET.course }}">
-            </div>
-            <div class="form-group col-md-2">
-                <label for="start_date">Start Date</label>
-                <input type="text" class="form-control datepicker" id="start_date" name="start_date" placeholder="Start Date" value="{{ request.GET.start_date }}">
-            </div>
-            <div class="form-group col-md-2">
-                <label for="end_date">End Date</label>
-                <input type="text" class="form-control datepicker" id="end_date" name="end_date" placeholder="End Date" value="{{ request.GET.end_date }}">
-            </div>
-            <div class="form-group col-md-12 text-center">
-                <button type="submit" class="btn btn-primary mt-3">Search</button>
-            </div>
+            <!-- Input fields for search -->
         </form>
 
         <!-- Attendance Table -->
@@ -82,7 +63,7 @@
                         <tr>
                             <td>{{ record.student.name }}</td>
                             <td>{{ record.date }}</td>
-                            <td>{{ record.status }}</td>
+                            <td class="{% if record.status == 'Present' %}status-present{% else %}status-absent{% endif %}">{{ record.status }}</td>
                         </tr>
                         {% endfor %}
                     {% else %}
@@ -96,27 +77,7 @@
 
         <!-- Pagination -->
         <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                {% if attendance_records.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ attendance_records.previous_page_number }}&{% for key, value in request.GET.items %}{{ key }}={{ value }}&{% endfor %}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-                {% for num in attendance_records.paginator.page_range %}
-                    <li class="page-item {% if attendance_records.number == num %}active{% endif %}">
-                        <a class="page-link" href="?page={{ num }}&{% for key, value in request.GET.items %}{{ key }}={{ value }}&{% endfor %}">{{ num }}</a>
-                    </li>
-                {% endfor %}
-                {% if attendance_records.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ attendance_records.next_page_number }}&{% for key, value in request.GET.items %}{{ key }}={{ value }}&{% endfor %}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
+            <!-- Pagination code -->
         </nav>
     </div>
 
