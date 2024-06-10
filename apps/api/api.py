@@ -99,16 +99,12 @@ def add_student_success(request):
 from datetime import date
 
 def attendance_view(request):
-    if request.method == 'POST':
-        # Get the current date
-        today = date.today()
-        
-        # Check if attendance has already been recorded for today
-        if Attendance.objects.filter(date=today).exists():
-            # If attendance for today already exists, redirect to a page indicating that attendance has already been recorded for today
-            return render(request, 'apps/attendance_already_recorded.html')
+    today = date.today()
 
-        # Iterate over the POST data to process attendance for each student
+    if Attendance.objects.filter(date=today).exists():
+        return redirect('attendance-report')
+
+    if request.method == 'POST':
         for student_id, status in request.POST.items():
             if student_id.startswith('student_'):
                 student_id = student_id.split('_')[1]
@@ -138,5 +134,10 @@ def attendance_report_view(request):
     return render(request, 'apps/attendance_report.html', {'attendance_records': attendance_records})
 
 def student_list_view(request):
-    students = Student.objects.all()
-    return render(request, 'apps/students.html', {'students': students})
+    if request.method == 'POST':
+        course = request.POST.get('course')
+        shift = request.POST.get('shift')
+        students = Student.objects.filter(course=course)
+        return render(request, 'apps/students.html', {'students': students})
+    else:
+        return render(request, 'apps/student_form.html')

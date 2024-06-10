@@ -1,0 +1,28 @@
+<!-- student_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Course and Shift</title>
+</head>
+<body>
+    <h1>Select Course and Shift</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="course">Select Course:</label>
+        <select id="course" name="course">
+            <option value="MBA IT">MBA IT</option>
+            <option value="MBA GLM">MBA GLM</option>
+            <option value="MBA FC">MBA FC</option>
+            <option value="MBA">MBA</option>
+        </select>
+        <label for="shift">Select Shift:</label>
+        <select id="shift" name="shift">
+            <option value="Morning">Morning</option>
+            <option value="Evening">Evening</option>
+        </select>
+        <button type="submit">Get Student Data</button>
+    </form>
+</body>
+</html>

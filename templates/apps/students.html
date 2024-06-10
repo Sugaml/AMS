@@ -41,16 +41,17 @@
         .search-container {
             margin-bottom: 20px;
             display: flex;
-            justify-content: space-between;
+            align-items: flex-end; /* Align items to the bottom */
         }
-        input[type=text] {
+        .search-container input[type=text] {
             width: 45%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
+            margin-right: 10px; /* Add margin between inputs */
         }
-        button[type=submit] {
+        .search-container button[type=submit] {
             padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
@@ -58,11 +59,10 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        button[type=submit]:hover {
+        .search-container button[type=submit]:hover {
             background-color: #45a049;
         }
         .add-new-link {
-            display: block;
             text-align: right;
             margin-top: 20px;
         }
@@ -70,25 +70,33 @@
             color: #4CAF50;
             text-decoration: none;
         }
+        .back-button {
+            margin-bottom: 20px;
+        }
+        .back-button a {
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .back-button a:hover {
+            color: #000;
+        }
+        .back-button .arrow {
+            font-size: 24px;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Attendance System</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
     <div class="container">
+        <!-- Back button -->
+        <div class="back-button">
+            <a href="{% url 'student-list' %}">
+                <span class="arrow">&#8592;</span> Back
+            </a>
+        </div>
         <h1>Student List</h1>
+        <!-- Search form -->
         <div class="search-container">
             <form action="{% url 'student-list' %}" method="GET">
                 <input type="text" id="roll_number" name="roll_number" placeholder="Search by Roll Number...">
@@ -96,6 +104,7 @@
                 <button type="submit">Search</button>
             </form>
         </div>
+        <!-- Student table -->
         <table>
             <thead>
                 <tr>
@@ -122,6 +131,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        <!-- Add new student link -->
         <div class="add-new-link">
             <a href="{% url 'add-student' %}">Add New Student</a>
         </div>
