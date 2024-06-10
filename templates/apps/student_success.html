@@ -30,12 +30,14 @@
         <h1>Student has been added successfully.</h1>
     </div>
 
-    <!-- JavaScript to close the popup after 5 seconds -->
+    <!-- JavaScript to close the popup after 5 seconds and redirect -->
     <script>
-        // Function to close the popup
+        // Function to close the popup and redirect
         function closePopup() {
             var popup = document.getElementById('popup');
             popup.style.display = 'none';
+            // Redirect to the students page
+            window.location.href = '/students/';
         }
 
         setTimeout(closePopup, 5000);

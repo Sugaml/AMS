@@ -12,6 +12,9 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from datetime import date
 from django.contrib.auth.views import LoginView, LogoutView
+import csv
+from django.core.paginator import Paginator
+
 
 
 
@@ -83,15 +86,34 @@ class LoginView(TemplateView):
         return HttpResponseRedirect(f"/login/?next={next}")
 
 def add_student_view(request):
+    form = StudentForm()  # Ensure form is always initialized
     if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('add-student-success')
-    else:
-        form = StudentForm()
+        if 'form_submit' in request.POST:
+            form = StudentForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('add-student-success')
+        elif 'csv_submit' in request.POST:
+            csv_file = request.FILES.get('csv_file')
+            if csv_file:
+                handle_uploaded_csv(csv_file)
+                return redirect('add-student-success')
     return render(request, 'apps/add_student.html', {'form': form})
 
+def handle_uploaded_csv(csv_file):
+    decoded_file = csv_file.read().decode('utf-8').splitlines()
+    reader = csv.reader(decoded_file)
+    for row in reader:
+        name, roll_number, course, dob, email = row
+        # Check if a student with the same roll number and course already exists
+        if not Student.objects.filter(roll_number=roll_number, course=course).exists():
+            Student.objects.create(
+                name=name,
+                roll_number=roll_number,
+                course=course,
+                dob=dob,
+                email=email
+            )
 
 def add_student_success(request):
     return render(request, 'apps/student_success.html')
@@ -122,11 +144,15 @@ def attendance_report_view(request):
     attendance_records = Attendance.objects.all().order_by('date', 'student')
     return render(request, 'apps/attendance_report.html', {'attendance_records': attendance_records})
 
+
 def student_list_view(request):
     if request.method == 'POST':
         course = request.POST.get('course')
         shift = request.POST.get('shift')
         students = Student.objects.filter(course=course)
-        return render(request, 'apps/students.html', {'students': students})
+        paginator = Paginator(students, 10)  # Show 10 students per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'apps/students.html', {'page_obj': page_obj, 'course': course, 'shift': shift})
     else:
         return render(request, 'apps/student_form.html')

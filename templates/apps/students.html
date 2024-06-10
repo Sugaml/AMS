@@ -41,7 +41,7 @@
         .search-container {
             margin-bottom: 20px;
             display: flex;
-            align-items: flex-end; /* Align items to the bottom */
+            align-items: flex-end;
         }
         .search-container input[type=text] {
             width: 45%;
@@ -49,7 +49,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
-            margin-right: 10px; /* Add margin between inputs */
+            margin-right: 10px;
         }
         .search-container button[type=submit] {
             padding: 10px 20px;
@@ -85,6 +85,31 @@
             font-size: 24px;
             margin-right: 5px;
         }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination a, .pagination span {
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            margin: 0 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+        .pagination .current {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+        .pagination .disabled {
+            color: #ccc;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -98,9 +123,10 @@
         <h1>Student List</h1>
         <!-- Search form -->
         <div class="search-container">
-            <form action="{% url 'student-list' %}" method="GET">
-                <input type="text" id="roll_number" name="roll_number" placeholder="Search by Roll Number...">
-                <input type="text" id="name" name="name" placeholder="Search by Name...">
+            <form action="{% url 'student-list' %}" method="POST">
+                {% csrf_token %}
+                <input type="text" id="course" name="course" placeholder="Search by Course..." value="{{ course }}">
+                <input type="text" id="shift" name="shift" placeholder="Search by Shift..." value="{{ shift }}">
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -116,7 +142,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for student in students %}
+                {% for student in page_obj %}
                 <tr>
                     <td>{{ student.name }}</td>
                     <td>{{ student.roll_number }}</td>
@@ -131,6 +157,26 @@
                 {% endfor %}
             </tbody>
         </table>
+        <!-- Pagination controls -->
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; First</a>
+                <a href="?page={{ page_obj.previous_page_number }}">&#8249; Previous</a>
+            {% else %}
+                <span class="disabled">&laquo; First</span>
+                <span class="disabled">&#8249; Previous</span>
+            {% endif %}
+            
+            <span class="current">{{ page_obj.number }}</span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Next &#8250;</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+            {% else %}
+                <span class="disabled">Next &#8250;</span>
+                <span class="disabled">Last &raquo;</span>
+            {% endif %}
+        </div>
         <!-- Add new student link -->
         <div class="add-new-link">
             <a href="{% url 'add-student' %}">Add New Student</a>
