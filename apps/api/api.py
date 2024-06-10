@@ -94,19 +94,41 @@ def add_student_view(request):
 
 
 def add_student_success(request):
-    return HttpResponse("Student has been added successfully.")
+    return render(request, 'apps/student_success.html')
+
+from datetime import date
 
 def attendance_view(request):
     if request.method == 'POST':
+        # Get the current date
+        today = date.today()
+        
+        # Check if attendance has already been recorded for today
+        if Attendance.objects.filter(date=today).exists():
+            # If attendance for today already exists, redirect to a page indicating that attendance has already been recorded for today
+            return render(request, 'apps/attendance_already_recorded.html')
+
+        # Iterate over the POST data to process attendance for each student
         for student_id, status in request.POST.items():
             if student_id.startswith('student_'):
                 student_id = student_id.split('_')[1]
                 student = Student.objects.get(pk=student_id)
-                Attendance.objects.create(student=student, date=date.today(), status=status)
+                
+                # Check if attendance for this student and date already exists
+                if Attendance.objects.filter(student=student, date=today).exists():
+                    # If attendance for this student and date already exists, skip creating a new record
+                    continue
+                
+                # Create attendance record only if it doesn't already exist
+                Attendance.objects.create(student=student, date=today, status=status)
+        
+        # Redirect to the success page after processing attendance
         return redirect('attendance-success')
 
+    # If the request method is GET, render the attendance form
     students = Student.objects.all()
     return render(request, 'apps/attendance.html', {'students': students})
+
 
 def attendance_success(request):
     return render(request, 'apps/attendance_success.html')
@@ -114,3 +136,7 @@ def attendance_success(request):
 def attendance_report_view(request):
     attendance_records = Attendance.objects.all().order_by('date', 'student')
     return render(request, 'apps/attendance_report.html', {'attendance_records': attendance_records})
+
+def student_list_view(request):
+    students = Student.objects.all()
+    return render(request, 'apps/students.html', {'students': students})

@@ -83,10 +83,41 @@ LOGIN_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": {
+        "ENGINE": (
+            "django.db.backends.sqlite3"
+            if config("DB_ENGINE", default="sqlite") == "sqlite"
+            else "django.db.backends.postgresql_psycopg2"
+        ),
+        "HOST": config("DB_HOST", default="localhost"),
+        "PORT": config("DB_PORT", default="5432"),
+        "NAME": config(
+            "DB_NAME",
+            default=(
+                BASE_DIR / "db.sqlite3"
+                if config("DB_ENGINE", default="sqlite") == "sqlite"
+                else "db"
+            ),
+        ),
+        "USER": config("DB_USER", default="postgres"),
+        "PASSWORD": config("DB_PASSWORD", default=""),
+        "OPTIONS": (
+            {}
+            if config("DB_ENGINE", default="sqlite") == "sqlite"
+            else {"sslmode": config("DB_SSL_MODE", default="disable")}
+        ),
+        "CONN_MAX_AGE": config("DB_CONN_MAX_AGE", default=0, cast=int),
+    },
+    # "replica_1": {
+    #     "ENGINE": "django.db.backends.postgresql_psycopg2",
+    #     "HOST": config("DB_REPLICA_HOST", default="localhost"),
+    #     "PORT": config("DB_REPLICA_PORT", default="5432"),
+    #     "NAME": config("DB_REPLICA_NAME", default="db"),
+    #     "USER": config("DB_REPLICA_USER", default="postgres"),
+    #     "PASSWORD": config("DB_REPLICA_PASS", default=""),
+    #     "CONN_MAX_AGE": config("DB_CONN_MAX_AGE", default=0, cast=int),
+    #     "OPTIONS": {"sslmode": config("DB_SSL_MODE", default="disable")},
+    # },
 }
 
 
