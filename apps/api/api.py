@@ -15,9 +15,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 import csv
 from django.core.paginator import Paginator
 from django.db.models import Count, F
-
-
-
+from django.db.models.functions import TruncDate
 
 
 def dashboard_view(request):
@@ -166,8 +164,8 @@ def attendance_report(request):
     if start_date and end_date:
         start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
         end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-        attendance_data = Attendance.objects.filter(date__range=[start_date, end_date]).values('student__name').annotate(total_attendance=Count('id'), period=F('date'))
+        attendance_data = Attendance.objects.filter(date__range=[start_date, end_date]).values('student__name').annotate(total_attendance=Count('id'), total_days=Count(TruncDate('date'), distinct=True))
     else:
-        attendance_data = Attendance.objects.filter(date__month=current_month, date__year=current_year).values('student__name').annotate(total_attendance=Count('id'), period=F('date'))
+        attendance_data = Attendance.objects.filter(date__month=current_month, date__year=current_year).values('student__name').annotate(total_attendance=Count('id'), total_days=Count(TruncDate('date'), distinct=True))
 
     return render(request, 'apps/attendance-month.html', {'attendance_data': attendance_data})
