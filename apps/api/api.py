@@ -100,28 +100,17 @@ from datetime import date
 
 def attendance_view(request):
     today = date.today()
-
     if Attendance.objects.filter(date=today).exists():
         return redirect('attendance-report')
-
     if request.method == 'POST':
         for student_id, status in request.POST.items():
             if student_id.startswith('student_'):
                 student_id = student_id.split('_')[1]
                 student = Student.objects.get(pk=student_id)
-                
-                # Check if attendance for this student and date already exists
                 if Attendance.objects.filter(student=student, date=today).exists():
-                    # If attendance for this student and date already exists, skip creating a new record
                     continue
-                
-                # Create attendance record only if it doesn't already exist
                 Attendance.objects.create(student=student, date=today, status=status)
-        
-        # Redirect to the success page after processing attendance
-        return redirect('attendance-success')
-
-    # If the request method is GET, render the attendance form
+                return redirect('attendance-success')
     students = Student.objects.all()
     return render(request, 'apps/attendance.html', {'students': students})
 
