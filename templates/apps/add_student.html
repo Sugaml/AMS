@@ -19,6 +19,22 @@
             background-color: #0056b3;
             border-color: #0056b3;
         }
+        /* Adjust spacing between form labels and input fields */
+        form label {
+            margin-bottom: 0.5rem; /* Adjust as needed */
+        }
+        /* Adjust spacing between form input fields */
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="date"] {
+            margin-bottom: 1rem; /* Adjust as needed */
+        }
+        /* Styling for CSV preview section */
+        .csv-preview {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -43,12 +59,81 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="form-header text-center">Add Student</h1>
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit" class="btn btn-primary btn-block">Add Student</button>
-                        </form>
+                        <!-- Collapsible accordion for form and CSV sections -->
+                        <div id="accordion">
+                            <!-- Form Section -->
+                            <div class="card">
+                                <div class="card-header" id="formHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#formSection" aria-expanded="true" aria-controls="formSection">
+                                            Add Student Form
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="formSection" class="collapse show" aria-labelledby="formHeading" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <!-- Add Student Form -->
+                                        <h1 class="form-header text-center">Add Student</h1>
+                                        <form method="post" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <!-- Adjust spacing between form fields -->
+                                            <div class="form-group">
+                                                {{ form.name.label_tag }}
+                                                {{ form.name }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.roll_number.label_tag }}
+                                                {{ form.roll_number }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.course.label_tag }}
+                                                {{ form.course }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.dob.label_tag }}
+                                                {{ form.dob }}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ form.email.label_tag }}
+                                                {{ form.email }}
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-block">Add Student</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- CSV Section -->
+                            <div class="card">
+                                <div class="card-header" id="csvHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#csvSection" aria-expanded="false" aria-controls="csvSection">
+                                            Import CSV
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="csvSection" class="collapse" aria-labelledby="csvHeading" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <!-- CSV Upload Container -->
+                                        <h1 class="form-header text-center">Upload CSV</h1>
+                                        <form method="post" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <!-- CSV file upload -->
+                                            <div class="form-group">
+                                                <label for="csv_file">Upload CSV File:</label>
+                                                <input type="file" name="csv_file" id="csv_file" accept=".csv">
+                                            </div>
+                                            <!-- CSV preview section -->
+                                            <div class="csv-preview">
+                                                <h4>CSV Preview:</h4>
+                                                <!-- Preview area for CSV data -->
+                                                <div id="csv_preview"></div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-block">Import CSV</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,5 +144,27 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Script for CSV file preview -->
+    <script>
+        $(document).ready(function(){
+            // Function to read and display the contents of a CSV file
+            function readCSV(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var csvData = e.target.result;
+                        // Display CSV data in preview area
+                        $('#csv_preview').html('<pre>' + csvData + '</pre>');
+                    };
+                    reader.readAsText(input.files[0]);
+                }
+            }
+
+            // Trigger readCSV function when a file is selected
+            $('#csv_file').change(function(){
+                readCSV(this);
+            });
+        });
+    </script>
 </body>
 </html>
