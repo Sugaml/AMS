@@ -4,6 +4,7 @@ from django.contrib import admin
 from apps.api import api as views
 
 
+
 urlpatterns = [
       path("", include('apps.api.urls') ),
 ]

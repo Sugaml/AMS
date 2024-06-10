@@ -12,3 +12,10 @@ run:
 
 superuser:
 	python manage.py createsuperuser
+
+
+migrationsfile:
+	python manage.py makemigrations
+
+migration:
+	python manage.py migrate

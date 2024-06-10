@@ -7,10 +7,19 @@ from django.http import HttpResponseRedirect
 from apps.models import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
+from .forms import StudentForm
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from datetime import date
+from django.contrib.auth.views import LoginView, LogoutView
 
+
+
+def dashboard_view(request):
+    return render(request, 'apps/dashboard.html')
 
 class HomeView(LoginRequiredMixin,TemplateView):
-    template_name = "apps/home.html"
+    template_name = "apps/dashboard.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -72,3 +81,36 @@ class LoginView(TemplateView):
                 request, "Login failed ! username do not match."
             )
         return HttpResponseRedirect(f"/login/?next={next}")
+
+def add_student_view(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('add-student-success')
+    else:
+        form = StudentForm()
+    return render(request, 'apps/add_student.html', {'form': form})
+
+
+def add_student_success(request):
+    return HttpResponse("Student has been added successfully.")
+
+def attendance_view(request):
+    if request.method == 'POST':
+        for student_id, status in request.POST.items():
+            if student_id.startswith('student_'):
+                student_id = student_id.split('_')[1]
+                student = Student.objects.get(pk=student_id)
+                Attendance.objects.create(student=student, date=date.today(), status=status)
+        return redirect('attendance-success')
+
+    students = Student.objects.all()
+    return render(request, 'apps/attendance.html', {'students': students})
+
+def attendance_success(request):
+    return render(request, 'apps/attendance_success.html')
+
+def attendance_report_view(request):
+    attendance_records = Attendance.objects.all().order_by('date', 'student')
+    return render(request, 'apps/attendance_report.html', {'attendance_records': attendance_records})

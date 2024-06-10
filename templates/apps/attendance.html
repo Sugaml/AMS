@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance Form</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .scrollable-table {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Mark Attendance</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="scrollable-table">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Roll Number</th>
+                            <th>Attendance</th>
+                            <th>Remarks (for Absences)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.roll_number }}</td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="student_{{ student.id }}" id="present_{{ student.id }}" value="Present" required>
+                                    <label class="form-check-label" for="present_{{ student.id }}">Present</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="student_{{ student.id }}" id="absent_{{ student.id }}" value="Absent">
+                                    <label class="form-check-label" for="absent_{{ student.id }}">Absent</label>
+                                </div>
+                            </td>
+                            <td>
+                                <textarea class="form-control" name="remarks_{{ student.id }}" placeholder="Remarks (optional)"></textarea>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
