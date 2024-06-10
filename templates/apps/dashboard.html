@@ -9,7 +9,11 @@
             margin-top: 50px;
         }
         .card {
-            margin: 20px;
+            background-color: #f8f9fa; /* Light gray background */
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 100%;
         }
         .welcome-text {
             margin-top: 20px;
@@ -27,6 +31,18 @@
         .navbar-text {
             color: white; /* White text color */
             margin-right: 20px; /* Add right margin */
+        }
+        .card-title i {
+            margin-right: 10px; /* Add space between icon and text */
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .btn {
+            width: 100%;
         }
     </style>
 </head>
@@ -49,8 +65,8 @@
     <div class="container dashboard-container">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="text-center">Welcome, {{ user.username }}!</h1>
-                <p class="text-center welcome-text">Manage your attendance system effectively. Use the options below to add students and mark attendance.</p>
+                <h1 class="text-center">SOMTU Attendance Management Panel</h1>
+                <p class="text-center welcome-text"><i>Manage your attendance system effectively.</i></p>
             </div>
         </div>
         <div class="row">
@@ -58,7 +74,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Add Student</h5>
+                        <h5 class="card-title"><i class="fas fa-user-plus"></i> Add Student</h5>
                         <p class="card-text">Add new students to the attendance system.</p>
                         <a href="{% url 'add-student' %}" class="btn btn-primary">Add Student</a>
                     </div>
@@ -68,7 +84,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">List Students</h5>
+                        <h5 class="card-title"><i class="fas fa-list"></i> List Students</h5>
                         <p class="card-text">View the list of students.</p>
                         <a href="{% url 'student-list' %}" class="btn btn-primary">List Students</a>
                     </div>
@@ -78,7 +94,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Mark Attendance</h5>
+                        <h5 class="card-title"><i class="far fa-calendar-check"></i> Mark Attendance</h5>
                         <p class="card-text">Mark the attendance of students.</p>
                         <a href="{% url 'attendance' %}" class="btn btn-primary">Mark Attendance</a>
                     </div>
@@ -88,17 +104,17 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Daily Attendance Report</h5>
+                        <h5 class="card-title"><i class="far fa-file-alt"></i> Daily Attendance Report</h5>
                         <p class="card-text">View the attendance report of students.</p>
                         <a href="{% url 'attendance-report' %}" class="btn btn-primary">Today Report</a>
                     </div>
                 </div>
             </div>
-              <!-- Attendance Report Card -->
-              <div class="col-md-4">
+            <!-- Attendance Report Card -->
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Attendance Report</h5>
+                        <h5 class="card-title"><i class="far fa-chart-bar"></i> Attendance Report</h5>
                         <p class="card-text">View the attendance report of students.</p>
                         <a href="{% url 'attendance_report' %}" class="btn btn-primary">View Report</a>
                     </div>
@@ -107,6 +123,8 @@
         </div>
     </div>
 
+    <!-- Include Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <!-- Include Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

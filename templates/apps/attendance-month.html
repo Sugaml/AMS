@@ -4,13 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         /* Add your CSS styles here */
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .card {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .card-header {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .card-body {
+            padding: 20px;
         }
         h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
             text-align: center;
+            color: #333;
         }
         table {
             width: 100%;
@@ -32,60 +57,136 @@
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
-        .search-container input[type=text], .search-container input[type=date] {
+        .search-container input[type=date] {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
+            width: 45%;
+            margin-right: 10px;
         }
-        .search-container button[type=submit] {
+        .search-container button[type=submit], .export-button {
             padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 20px;
         }
-        .search-container button[type=submit]:hover {
+        .search-container button[type=submit]:hover, .export-button:hover {
+            background-color: #45a049;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 120px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown:hover .export-button {
             background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <h1>Attendance Report</h1>
+    <div class="card">
+        <div class="card-header">
+            <h1>Attendance Report</h1>
+        </div>
+        <div class="card-body">
+            <!-- Search form with export options -->
+            <div class="search-container">
+                <form action="" method="GET">
+                    <input type="date" name="start_date" placeholder="Start Date">
+                    <input type="date" name="end_date" placeholder="End Date">
+                    <button type="submit">Search</button>
+                </form>
+                <div class="dropdown">
+                    <button class="export-button">Export <i class="fas fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" id="export-pdf">Export as PDF</a>
+                        <a href="#" id="export-csv">Export as CSV</a>
+                    </div>
+                </div>
+            </div>
 
-    <!-- Search form -->
-    <div class="search-container">
-        <form action="" method="GET">
-            <input type="date" name="start_date" placeholder="Start Date">
-            <input type="date" name="end_date" placeholder="End Date">
-            <button type="submit">Search</button>
-        </form>
+            <!-- Attendance table -->
+            <table id="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Total Attendance</th>
+                        <th>Period of Attendances</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attendance in attendance_data %}
+                    <tr>
+                        <td>{{ attendance.student__name }}</td>
+                        <td>{{ attendance.total_attendance }}</td>
+                        <td>{{ attendance.period }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No data found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- Attendance table -->
-    <table>
-        <thead>
-            <tr>
-                <th>Student Name</th>
-                <th>Total Attendance</th>
-                <th>Period of Attendances</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for attendance in attendance_data %}
-            <tr>
-                <td>{{ attendance.student__name }}</td>
-                <td>{{ attendance.total_attendance }}</td>
-                <td>{{ attendance.period }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="3">No data found</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+    <script>
+        document.getElementById('export-pdf').addEventListener('click', function () {
+            var doc = new jsPDF();
+            doc.autoTable({html: '#attendance-table'});
+            var pdfOutput = doc.output('bloburl');
+            window.open(pdfOutput);
+        });
+
+        document.getElementById('export-csv').addEventListener('click', function () {
+            var table = document.getElementById('attendance-table');
+            var csv = [];
+            var rows = table.querySelectorAll('tr');
+            
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll('td, th');
+                
+                for (var j = 0; j < cols.length; j++) 
+                    row.push(cols[j].innerText);
+                
+                csv.push(row.join(','));
+            }
+
+            var csvContent = "data:text/csv;charset=utf-8," + csv.join('\n');
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "attendance_report.csv");
+            document.body.appendChild(link);
+            link.click();
+        });
+    </script>
 </body>
 </html>
