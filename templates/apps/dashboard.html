@@ -7,6 +7,7 @@
     <style>
         .dashboard-container {
             margin-top: 50px;
+            margin-bottom: 50px;
         }
         .card {
             background-color: #f8f9fa; /* Light gray background */
@@ -19,18 +20,20 @@
             margin-top: 20px;
         }
         .navbar {
-            background-color: #007bff; /* Blue color */
-            color: white; /* White text color */
+            background-color: #002366; /* Dark blue color */
         }
         .navbar-brand {
-            color: white; /* White text color */
+            color: white !important; /* White color */
+            font-weight: bold !important;
         }
         .navbar-nav .nav-link {
-            color: white; /* White text color */
+            color: white !important; /* White color */
+            font-weight: bold !important;
         }
         .navbar-text {
-            color: white; /* White text color */
+            color: white !important; /* White color */
             margin-right: 20px; /* Add right margin */
+            font-weight: bold !important;
         }
         .card-title i {
             margin-right: 10px; /* Add space between icon and text */
@@ -44,16 +47,39 @@
         .btn {
             width: 100%;
         }
+        .notification-icon {
+            margin-right: 10px;
+        }
+        .footer {
+            background-color: #002366; /* Dark blue color */
+            color: #FFD700; /* Gold color */
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .footer a {
+            color: #FFD700; /* Gold color */
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-        <a class="navbar-brand" href="#">SOMTU Attendance Management System</a>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{% url 'home_page' %}">SOMTU Attendance Management System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <span class="navbar-text"><strong>{{ user.username }}</strong></span> <!-- Display username here -->
+                    <span class="navbar-text">
+                        <i class="fas fa-bell notification-icon"></i> <!-- Notification Icon -->
+                        <strong>{{ user.username }}</strong> <!-- Display username here -->
+                    </span>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}"><strong>Logout</strong></a>
@@ -100,7 +126,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Attendance Report Card -->
+            <!-- Daily Attendance Report Card -->
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
@@ -122,6 +148,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 School of Management, Tribhuvan University, Kirtipur. All rights reserved.</p>
+        <p><a href="https://somtu.edu.np/">Visit our website</a></p>
+    </footer>
 
     <!-- Include Font Awesome -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>

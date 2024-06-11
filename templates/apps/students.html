@@ -122,14 +122,6 @@
         </div>
         <h1>Student List</h1>
         <!-- Search form -->
-        <div class="search-container">
-            <form action="{% url 'student-list' %}" method="POST">
-                {% csrf_token %}
-                <input type="text" id="course" name="course" placeholder="Search by Course..." value="{{ course }}">
-                <input type="text" id="shift" name="shift" placeholder="Search by Shift..." value="{{ shift }}">
-                <button type="submit">Search</button>
-            </form>
-        </div>
         <!-- Student table -->
         <table>
             <thead>

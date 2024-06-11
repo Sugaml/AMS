@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from apps.models import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
-from .forms import StudentForm
+from .student_forms import StudentForm
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from datetime import date
