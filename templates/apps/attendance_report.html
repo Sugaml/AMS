@@ -1,99 +1,208 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Report</title>
-    <!-- Include Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Include Bootstrap Datepicker CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        .container {
-            margin-top: 50px;
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .table th, .table td {
-            vertical-align: middle;
+        .card {
+            width: 90%;
+            max-width: 1000px;
+            margin: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-        .search-form {
-            margin-bottom: 30px;
+        .card-header {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
         }
-        /* Define custom CSS for status */
-        .status-present {
-            color: green; /* Green color for 'Present' */
+        .card-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
-        .status-absent {
-            color: red; /* Red color for 'Absent' */
+        h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: left;
+        }
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .search-container input[type=date] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 45%;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .search-container button[type=submit], .export-button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .search-container button[type=submit]:hover, .export-button:hover {
+            background-color: #0056b3;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 120px;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown:hover .export-button {
+            background-color: #0056b3;
+        }
+        .table-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Attendance System</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-            </ul>
+    <div class="card">
+        <div class="card-header">
+            <h1>Attendance Report</h1>
         </div>
-    </nav>
-    <div class="container">
-        <h1 class="text-center">Attendance Report</h1>
-        <!-- Search Form -->
-        <form method="get" class="form-row search-form">
-            <!-- Input fields for search -->
-        </form>
+        <div class="card-body">
+            <!-- Search form with export options -->
+            <div class="search-container">
+                <form action="" method="GET">
+                    <input type="date" name="start_date" placeholder="Start Date">
+                    <input type="date" name="end_date" placeholder="End Date">
+                    <button type="submit">Search</button>
+                </form>
+                <div class="dropdown">
+                    <button class="export-button">Export <i class="fas fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" id="export-pdf">Export as PDF</a>
+                        <a href="#" id="export-csv">Export as CSV</a>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Attendance Table -->
-        <div class="table-responsive mt-4">
-            <table class="table table-bordered table-striped">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Student</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if attendance_records %}
-                        {% for record in attendance_records %}
+            <!-- Attendance table with scrollable container -->
+            <div class="table-container">
+                <table id="attendance-table">
+                    <thead>
                         <tr>
-                            <td>{{ record.student.name }}</td>
-                            <td>{{ record.date }}</td>
-                            <td class="{% if record.status == 'Present' %}status-present{% else %}status-absent{% endif %}">{{ record.status }}</td>
+                            <th>Student Name</th>
+                            <th>Total Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attendance in attendance_data %}
+                        <tr>
+                            <td>{{ attendance.student__name }}</td>
+                            <td>{{ attendance.total_attendance }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2">No data found</td>
                         </tr>
                         {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="3" class="text-center">No records found</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <!-- Pagination -->
-        <nav aria-label="Page navigation">
-            <!-- Pagination code -->
-        </nav>
     </div>
 
-    <!-- Include Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <!-- Include Bootstrap Datepicker JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
     <script>
-        $(document).ready(function(){
-            $('.datepicker').datepicker({
-                format: 'yyyy-mm-dd',
-                autoclose: true,
-                todayHighlight: true
-            });
+        document.getElementById('export-pdf').addEventListener('click', function () {
+            var doc = new jsPDF();
+            doc.autoTable({html: '#attendance-table'});
+            var pdfOutput = doc.output('bloburl');
+            window.open(pdfOutput);
+        });
+
+        document.getElementById('export-csv').addEventListener('click', function () {
+            var table = document.getElementById('attendance-table');
+            var csv = [];
+            var rows = table.querySelectorAll('tr');
+            
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll('td, th');
+                
+                for (var j = 0; j < cols.length; j++) 
+                    row.push(cols[j].innerText);
+                
+                csv.push(row.join(','));
+            }
+
+            var csvContent = "data:text/csv;charset=utf-8," + csv.join('\n');
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "attendance_report.csv");
+            document.body.appendChild(link);
+            link.click();
         });
     </script>
 </body>

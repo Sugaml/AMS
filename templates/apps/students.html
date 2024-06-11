@@ -110,6 +110,24 @@
             color: #ccc;
             border: 1px solid #ddd;
         }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .view-btn { background-color: #3498db; color: white; }
+        .edit-btn { background-color: #f39c12; color: white; }
+        .disable-btn { background-color: #e74c3c; color: white; }
+        .delete-btn { background-color: #bdc3c7; color: white; }
+        .view-btn:hover { background-color: #2980b9; }
+        .edit-btn:hover { background-color: #e67e22; }
+        .disable-btn:hover { background-color: #c0392b; }
+        .delete-btn:hover { background-color: #95a5a6; }
     </style>
 </head>
 <body>
@@ -122,6 +140,10 @@
         </div>
         <h1>Student List</h1>
         <!-- Search form -->
+        <div class="search-container">
+            <input type="text" placeholder="Search by name or roll number">
+            <button type="submit">Search</button>
+        </div>
         <!-- Student table -->
         <table>
             <thead>
@@ -129,7 +151,7 @@
                     <th>Name</th>
                     <th>Roll Number</th>
                     <th>Course</th>
-                    <th>Date of Birth</th>
+                    <th>Shift</th>
                     <th>Email</th>
                 </tr>
             </thead>
@@ -139,12 +161,12 @@
                     <td>{{ student.name }}</td>
                     <td>{{ student.roll_number }}</td>
                     <td>{{ student.course }}</td>
-                    <td>{{ student.dob }}</td>
+                    <td>{{ student.shift }}</td>
                     <td>{{ student.email }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" style="text-align: center;">No students found.</td>
+                    <td colspan="6" style="text-align: center;">No students found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
