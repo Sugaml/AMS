@@ -38,7 +38,7 @@
                 </thead>
                 <tbody>
                     {% for attendance in attendance_counts %}
-                    <tr>
+                    <tr {% if attendance.student__name == today %}class="today-attendance"{% endif %}>
                         <td>{{ attendance.student__name }}</td>
                         <td>{{ attendance.total_attendance }}</td>
                     </tr>

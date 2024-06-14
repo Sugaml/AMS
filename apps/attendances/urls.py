@@ -6,5 +6,5 @@ urlpatterns = [
     path('', views.AttendanceView, name='attendance_view'),
     path('report/', views.AttendanceReportView, name='attendance_report'),
     path('success/', views.AttendanceSuccess, name='attendance_success'),
-    path('monitoring-report/', views.MonitoringReportView, name='monitoring_report_view'),
+    path('monitoring-report/', views.this_months_attendance_report, name='this_months_attendance_report'),
 ]
