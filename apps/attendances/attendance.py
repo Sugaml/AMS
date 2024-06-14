@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from apps.models import *
 from datetime import datetime
 from datetime import date
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.paginator import Paginator
 from django.db.models import Count, F
 from django.db.models.functions import TruncDate
@@ -21,18 +21,18 @@ def AttendanceView(request):
                 student = Student.objects.get(pk=student_id)
                 if not Attendance.objects.filter(student=student, date=today).exists():
                     Attendance.objects.create(student=student, date=today, status=status)
-        return redirect('attendance-success')
+        return redirect('attendance/success')
     students = Student.objects.all()
-    return render(request, 'apps/attendance.html', {'students': students})
-
+    return render(request, 'attendances/attendance.html', {'students': students})
 def AttendanceSuccess(request):
-    return render(request, 'apps/attendance_success.html')
+    return render(request, 'attendances/attendance_success.html')
 
 def AttendanceReportView(request):
     attendance_records = Attendance.objects.all().order_by('date', 'student')
-    return render(request, 'apps/attendance_report.html', {'attendance_records': attendance_records})
+    return render(request, 'attendances/attendance_report.html', {'attendance_records': attendance_records})
 
-    
+
+
 def MonitoringReportView(request):
     current_month = datetime.now().month
     current_year = datetime.now().year
@@ -47,4 +47,4 @@ def MonitoringReportView(request):
     else:
         attendance_data = Attendance.objects.filter(date__month=current_month, date__year=current_year).values('student__name').annotate(total_attendance=Count('id'), total_days=Count(TruncDate('date'), distinct=True))
 
-    return render(request, 'apps/attendance-month.html', {'attendance_data': attendance_data})
+    return render(request, 'attendances/attendance-month.html', {'attendance_data': attendance_data})

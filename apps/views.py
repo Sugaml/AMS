@@ -11,7 +11,7 @@ def attendance_view(request):
                 student_id = student_id.split('_')[1]
                 student = Student.objects.get(pk=student_id)
                 Attendance.objects.create(student=student, date=date.today(), status=status)
-        return redirect('attendance-success')
+        return redirect('attendance/success')
 
     students = Student.objects.all()
     return render(request, 'attendance.html', {'students': students})
