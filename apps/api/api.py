@@ -98,7 +98,7 @@ def add_student_view(request):
             if csv_file:
                 handle_uploaded_csv(csv_file)
                 return redirect('add-student-success')
-    return render(request, 'apps/add_student.html', {'form': form})
+    return render(request, 'students/add_student.html', {'form': form})
 
 def handle_uploaded_csv(csv_file):
     decoded_file = csv_file.read().decode('utf-8').splitlines()
@@ -116,7 +116,7 @@ def handle_uploaded_csv(csv_file):
             )
 
 def add_student_success(request):
-    return render(request, 'apps/student_success.html')
+    return render(request, 'students/student_success.html')
 
 def student_list_view(request):
     if request.method == 'POST':
@@ -126,7 +126,7 @@ def student_list_view(request):
         paginator = Paginator(students, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        return render(request, 'apps/students.html', {'page_obj': page_obj, 'course': course, 'shift': shift})
+        return render(request, 'students/students.html', {'page_obj': page_obj, 'course': course, 'shift': shift})
     else:
-        return render(request, 'apps/student_form.html')
+        return render(request, 'students/student_form.html')
     

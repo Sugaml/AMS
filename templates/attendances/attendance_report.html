@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Today's Attendance Report{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>Today's Attendance Report</h1>
+    </div>
+    <div class="card-body">
+        <!-- Search form -->
+        <form action="" method="GET" class="mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" name="student_name" class="form-control" placeholder="Search by Student Name" value="{{ student_name }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Attendance table -->
+        {% if attendance_counts %}
+        <div class="table-container">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Total Attendance Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attendance in attendance_counts %}
+                    <tr>
+                        <td>{{ attendance.student__name }}</td>
+                        <td>{{ attendance.total_attendance }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2">No attendance records found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+            No attendance records found for today.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,165 +1,66 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-    <!-- Include Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .dashboard-container {
-            margin-top: 50px;
-            margin-bottom: 50px;
-        }
-        .card {
-            background-color: #f8f9fa; /* Light gray background */
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            height: 100%;
-        }
-        .welcome-text {
-            margin-top: 20px;
-        }
-        .navbar {
-            background-color: #002366; /* Dark blue color */
-        }
-        .navbar-brand {
-            color: white !important; /* White color */
-            font-weight: bold !important;
-        }
-        .navbar-nav .nav-link {
-            color: white !important; /* White color */
-            font-weight: bold !important;
-        }
-        .navbar-text {
-            color: white !important; /* White color */
-            margin-right: 20px; /* Add right margin */
-            font-weight: bold !important;
-        }
-        .card-title i {
-            margin-right: 10px; /* Add space between icon and text */
-        }
-        .card-body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-        .btn {
-            width: 100%;
-        }
-        .notification-icon {
-            margin-right: 10px;
-        }
-        .footer {
-            background-color: #002366; /* Dark blue color */
-            color: #FFD700; /* Gold color */
-            padding: 20px 0;
-            text-align: center;
-            margin-top: 50px;
-        }
-        .footer a {
-            color: #FFD700; /* Gold color */
-            text-decoration: none;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="{% url 'home_page' %}">SOMTU Attendance Management System</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <span class="navbar-text">
-                        <i class="fas fa-bell notification-icon"></i> <!-- Notification Icon -->
-                        <strong>{{ user.username }}</strong> <!-- Display username here -->
-                    </span>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}"><strong>Logout</strong></a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+{% extends 'base.html' %}
 
-    <div class="container dashboard-container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 class="text-center">SOMTU Attendance Management Panel</h1>
-                <p class="text-center welcome-text"><i>Manage your attendance system effectively.</i></p>
+{% block title %}SMOTU AMS{% endblock %}
+
+{% block content %}
+<div class="container dashboard-container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">SOMTU Attendance Management Panel</h1>
+            <p class="text-center welcome-text"><i>Manage your attendance system effectively.</i></p>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Add Student Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-user-plus"></i> Add Student</h5>
+                    <p class="card-text">Add new students to the attendance system.</p>
+                    <a href="{% url 'add-student' %}" class="btn btn-primary">Add Student</a>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <!-- Add Student Card -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-user-plus"></i> Add Student</h5>
-                        <p class="card-text">Add new students to the attendance system.</p>
-                        <a href="{% url 'add-student' %}" class="btn btn-primary">Add Student</a>
-                    </div>
+        <!-- List Students Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-list"></i> List Students</h5>
+                    <p class="card-text">View the list of students.</p>
+                    <a href="{% url 'student-list' %}" class="btn btn-primary">List Students</a>
                 </div>
             </div>
-            <!-- List Students Card -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-list"></i> List Students</h5>
-                        <p class="card-text">View the list of students.</p>
-                        <a href="{% url 'student-list' %}" class="btn btn-primary">List Students</a>
-                    </div>
+        </div>
+        <!-- Attendance Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="far fa-calendar-check"></i> Mark Attendance</h5>
+                    <p class="card-text">Mark the attendance of students.</p>
+                    <a href="{% url 'attendance_view' %}" class="btn btn-primary">Mark Attendance</a>
                 </div>
             </div>
-            <!-- Attendance Card -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="far fa-calendar-check"></i> Mark Attendance</h5>
-                        <p class="card-text">Mark the attendance of students.</p>
-                        <a href="{% url 'attendance_view' %}" class="btn btn-primary">Mark Attendance</a>
-                    </div>
+        </div>
+        <!-- Daily Attendance Report Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="far fa-file-alt"></i> Daily Attendance Report</h5>
+                    <p class="card-text">View the attendance report of students.</p>
+                    <a href="{% url 'attendance_report' %}" class="btn btn-primary">Today Report</a>
                 </div>
             </div>
-            <!-- Daily Attendance Report Card -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="far fa-file-alt"></i> Daily Attendance Report</h5>
-                        <p class="card-text">View the attendance report of students.</p>
-                        <a href="{% url 'attendance_report' %}" class="btn btn-primary">Today Report</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Attendance Report Card -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="far fa-chart-bar"></i> Attendance Report</h5>
-                        <p class="card-text">View the attendance report of students.</p>
-                        <a href="{% url 'this_months_attendance_report' %}" class="btn btn-primary">View Report</a>
-                    </div>
+        </div>
+        <!-- Attendance Report Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="far fa-chart-bar"></i> Attendance Report</h5>
+                    <p class="card-text">View the attendance report of students.</p>
+                    <a href="{% url 'this_months_attendance_report' %}" class="btn btn-primary">View Report</a>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 School of Management, Tribhuvan University, Kirtipur. All rights reserved.</p>
-        <p><a href="https://somtu.edu.np/">Visit our website</a></p>
-    </footer>
-
-    <!-- Include Font Awesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <!-- Include Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}
