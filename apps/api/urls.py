@@ -9,11 +9,6 @@ urlpatterns = [
     path("home/", views.HomeView.as_view(), name="home_page"),
     path('add-student/', views.add_student_view, name='add-student'),
     path('add-student-success/', views.add_student_success, name='add-student-success'),
-    path('attendance-report/', views.attendance_report_view, name='attendance-report'),
-    path('attendance/', views.attendance_view, name='attendance'),
-    path('attendance-success/', views.attendance_success, name='attendance-success'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('students/', views.student_list_view, name='student-list'),
-    path('attendance/report/', views.attendance_report, name='attendance_report'),
-
 ]
