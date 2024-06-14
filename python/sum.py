@@ -1,0 +1,6 @@
+print("Enter number  : ")
+a=int(input())
+print("Enter number : ")
+b=int(input())
+sum=int(a+b)
+print("Sum :: {}".format(sum))

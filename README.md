@@ -1,5 +1,4 @@
-# AMS
-AMS
+# LMS
 
 ## Installation
 
@@ -37,7 +36,7 @@ source venv/bin/activate
 
 ## Usage
 
-Go to the AMS folder and run
+Go to the LMS folder and run
 
 ```bash
 python manage.py runserver
