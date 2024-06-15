@@ -36,3 +36,32 @@ class Attendance(models.Model):
 
     def __str__(self):
         return f"{self.student.name} - {self.date} - {self.status}"
+
+class Program(models.Model):
+    name = models.CharField(max_length=255)
+    is_annual = models.BooleanField(default=False)
+    credits = models.IntegerField()
+    quota = models.IntegerField()
+    fee = models.DecimalField(max_digits=10, decimal_places=2)
+    level = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+class Semester(models.Model):
+    program = models.ForeignKey(Program, related_name='semesters', on_delete=models.CASCADE)
+    semester_number = models.IntegerField()
+
+    def __str__(self):
+        return f"Semester {self.semester_number} - {self.program.name}"
+
+class Subject(models.Model):
+    semester = models.ForeignKey(Semester, related_name='subjects', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=50)
+    credits = models.IntegerField()
+    type = models.CharField(max_length=50)  # e.g., 'Major', 'Minor'
+
+    def __str__(self):
+        return f"{self.name} ({self.code}) - Semester {self.semester.semester_number}"
