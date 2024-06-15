@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import views
+from . import semester as views
 
 urlpatterns = [
     path('programs/<int:program_id>/semesters/', views.semester_list, name='semester_list'),

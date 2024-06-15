@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.views import views
+from . import subject as views
 
 urlpatterns = [
     path('semesters/<int:semester_id>/subjects/', views.subject_list, name='subject_list'),
