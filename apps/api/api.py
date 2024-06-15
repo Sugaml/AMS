@@ -130,3 +130,39 @@ def student_list_view(request):
     else:
         return render(request, 'students/student_form.html')
     
+def csv_preview(request):
+    if request.method == 'POST' and request.FILES.get('csv_file'):
+        csv_file = request.FILES['csv_file']
+        try:
+            # Read the CSV file
+            csv_data = csv_file.read().decode('utf-8')
+            csv_reader = csv.reader(csv_data.splitlines())
+
+            # Prepare HTML for CSV preview
+            preview_html = '<table class="table table-bordered table-sm"><thead><tr>'
+
+            # Add headers
+            headers = next(csv_reader)
+            for header in headers:
+                preview_html += '<th>' + header + '</th>'
+            preview_html += '</tr></thead><tbody>'
+
+            # Add rows
+            for row in csv_reader:
+                preview_html += '<tr>'
+                for cell in row:
+                    preview_html += '<td>' + cell + '</td>'
+                preview_html += '</tr>'
+
+            preview_html += '</tbody></table>'
+            
+            # Render the preview in a new tab
+            return HttpResponse(preview_html)
+        
+        except Exception as e:
+            # Handle errors gracefully
+            error_message = f"Error processing CSV file: {str(e)}"
+            return HttpResponse(error_message, status=400)
+
+    # Handle GET requests or invalid requests
+    return HttpResponse("Invalid request method or missing CSV file", status=400)

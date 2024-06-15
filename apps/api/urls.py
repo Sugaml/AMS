@@ -11,4 +11,5 @@ urlpatterns = [
     path('add-student-success/', views.add_student_success, name='add-student-success'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('students/', views.student_list_view, name='student-list'),
+    path('csv-preview/', views.csv_preview, name='csv_preview'),
 ]

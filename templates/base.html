@@ -48,6 +48,13 @@
         }
         .notification-icon {
             margin-right: 10px;
+            color: #FFD700 !important; /* Light golden color */
+            cursor: pointer;
+        }
+        .refresh-icon {
+            margin-right: 10px;
+            color: white !important; /* White color */
+            cursor: pointer;
         }
         .footer {
             background-color: #002366;
@@ -75,8 +82,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
+                    <i class="fas fa-sync-alt refresh-icon" onclick="location.reload();"></i> <!-- Refresh Icon -->
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-bell notification-icon"></i> <!-- Notification Icon -->
+                </li>
+                <li class="nav-item">
                     <span class="navbar-text">
-                        <i class="fas fa-bell notification-icon"></i>
                         <strong>{{ user.username }}</strong>
                     </span>
                 </li>
@@ -93,14 +105,6 @@
             {% endblock %}
         </div>
     </div>
-
-  
-
-    <!-- Footer -->
-    <!-- <footer class="footer">
-        <p>&copy; 2024 School of Management, Tribhuvan University, Kirtipur. All rights reserved.</p>
-        <p><a href="https://somtu.edu.np/">Visit our website</a></p>
-    </footer> -->
 
     <!-- Include Font Awesome -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
