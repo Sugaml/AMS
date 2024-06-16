@@ -1,16 +1,10 @@
 from django.urls import path, include
-from . import views
 from django.contrib import admin
 from apps.api import api as views
 from apps.attendances import attendance as views
 from apps.programs import program as views
 from apps.semesters import semester as views
 from apps.subjects import subject as views
-
-
-
-
-
 
 urlpatterns = [
       path("", include('apps.api.urls') ),

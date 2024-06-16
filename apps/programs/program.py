@@ -1,11 +1,25 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from apps.models import Program, Semester, Subject
-from .forms import ProgramForm, SemesterForm, SubjectForm
+from .forms import ProgramForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 def program_list(request):
-    programs = Program.objects.all()
-    return render(request, 'programs/program_list.html', {'programs': programs})
+    query = request.GET.get('search')
+    if query:
+        programs = Program.objects.filter(name__icontains=query)
+    else:
+        programs = Program.objects.all()
+    paginator = Paginator(programs, 10)
+    page_number = request.GET.get('page')
+    try:
+        programs = paginator.page(page_number)
+    except PageNotAnInteger:
+        programs = paginator.page(1)
+    except EmptyPage:
+        programs = paginator.page(paginator.num_pages)
+    return render(request, 'programs/program_list.html', {'programs': programs, 'query': query})
 
 def program_create(request):
     if request.method == 'POST':

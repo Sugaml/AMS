@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from apps.models import Program, Semester, Subject
-from .forms import ProgramForm, SemesterForm, SubjectForm
+from .forms import SubjectForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 def subject_list(request, semester_id):

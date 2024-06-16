@@ -4,7 +4,6 @@ from apps.models import *
 from datetime import datetime
 from datetime import date
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.paginator import Paginator
 from django.db.models import Count, F
 from django.db.models.functions import TruncDate
 from datetime import datetime, date, timedelta
