@@ -4,24 +4,19 @@
 
 {% block content %}
 <div class="container mt-4">
-    <!-- Back Button -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <a href="javascript:history.back()" class="btn btn-link">
-                <i class="fas fa-arrow-left"></i> Back
-            </a>
-        </div>
-    </div>
-
-    <h1 class="text-center">Today's Attendance Report</h1>
+    <h1 class="text-center mb-4">Today's Attendance Report</h1>
 
     <!-- Search form -->
-    <div class="row justify-content-center mb-4">
+    <div class="row justify-content-end mb-4">
         <div class="col-md-6">
-            <form method="get" class="input-group">
-                <input type="text" name="student_name" class="form-control" placeholder="Search by student name" value="{{ student_name }}">
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">Search</button>
+            <form method="get" class="form-inline justify-content-end">
+                <div class="input-group">
+                    <input type="text" name="student_name" class="form-control" placeholder="Search by student name" value="{{ student_name }}">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
